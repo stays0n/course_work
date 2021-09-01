@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Users from './components/users';
 import SearchStatus from './components/searchStatus';
+// import Pagination from './components/pagination';
 import api from './api/index';
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
         onHandleDelete={handleDelete}
         onHandleToggleBookMark={handleToggleBookMark}
       />
+      {/* <Pagination /> */}
     </React.Fragment>
   );
 };

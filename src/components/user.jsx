@@ -1,6 +1,7 @@
 import React from 'react';
 import Qualitie from './qualitie';
 import BookMark from './bookmark';
+import PropTypes from 'prop-types';
 
 const User = ({
   user: { _id, name, qualities, profession, completedMeetings, rate, status },
@@ -32,6 +33,11 @@ const User = ({
       </tr>
     </React.Fragment>
   );
+};
+
+User.propTypes = {
+  user: PropTypes.object.isRequired,
+  onHandleDelete: PropTypes.func.isRequired,
 };
 
 export default User;
