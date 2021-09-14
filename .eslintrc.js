@@ -15,7 +15,14 @@ module.exports = {
   rules: {
     indent: ['error', 2],
     semi: [2, 'always'],
-    'space-before-function-paren': ['error', 'never'],
+    'space-before-function-paren': [
+      'error',
+      {
+        anonymous: 'always',
+        named: 'never',
+        asyncArrow: 'always',
+      },
+    ],
     quotes: [2, 'single'],
     'comma-dangle': ['error', 'always-multiline'],
     'no-unneeded-ternary': 0,

@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Users from './components/users';
-import SearchStatus from './components/searchStatus';
 // import Pagination from './components/pagination';
 import api from './api/index';
 
 const App = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
+
+  useEffect(() => {
+    api.users.fetchAll().then((data) => setUsers(data));
+  }, []);
 
   const handleDelete = (userId) => setUsers(users.filter(({ _id }) => userId !== _id));
 
@@ -20,7 +23,6 @@ const App = () => {
 
   return (
     <React.Fragment>
-      <SearchStatus length={users.length} />
       <Users
         users={users}
         onHandleDelete={handleDelete}
