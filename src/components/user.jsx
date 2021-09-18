@@ -1,10 +1,10 @@
 import React from 'react';
-import Qualitie from './qualitie';
+import Qualitie from './quality';
 import BookMark from './bookmark';
 import PropTypes from 'prop-types';
 
 const User = ({
-  user: { _id, name, qualities, profession, completedMeetings, rate, status },
+  user: { _id, name, qualities, profession, completedMeetings, rate, bookmark },
   onHandleDelete,
   ...rest
 }) => {
@@ -23,7 +23,7 @@ const User = ({
         <td>{completedMeetings}</td>
         <td>{rate}</td>
         <td>
-          <BookMark status={status} id={_id} {...rest} />
+          <BookMark status={bookmark} onClick={onHandleDelete} />
         </td>
         <td>
           <button className='btn btn-danger' onClick={() => onHandleDelete(_id)}>

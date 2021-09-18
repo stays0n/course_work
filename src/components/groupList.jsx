@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const GroupList = ({ items, selectedItem, valueProperty, contentProperty, onItemSelect }) => {
-  console.log(items);
+  // console.log(items);
   const newItems = Array.isArray(items) ? items : Object.values(items);
 
   return (

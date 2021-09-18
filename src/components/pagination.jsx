@@ -5,7 +5,7 @@ const Pagination = (props) => {
   const { itemsCount, pageSize, currentPage, onPageChange } = props;
   const pageCount = Math.ceil(itemsCount / pageSize);
   const pages = [];
-  console.log(currentPage);
+  // console.log(currentPage);
   if (pageCount === 1) return null;
   for (let i = 1; i <= pageCount; i++) {
     pages.push(i);
@@ -27,7 +27,7 @@ const Pagination = (props) => {
 };
 
 Pagination.propTypes = {
-  itemsCount: PropTypes.number.isRequired,
+  itemsCount: PropTypes.number,
   pageSize: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
