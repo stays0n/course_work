@@ -1,43 +1,17 @@
-import React from 'react';
-import Qualitie from './quality';
-import BookMark from './bookmark';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import api from '../api';
+import UserInfo from './userInfo';
 
-const User = ({
-  user: { _id, name, qualities, profession, completedMeetings, rate, bookmark },
-  onHandleDelete,
-  ...rest
-}) => {
-  return (
-    <React.Fragment>
-      <tr key={_id}>
-        <th scope='row'>{name}</th>
-        <td>
-          {qualities.map((item) => (
-            <Qualitie key={item._id} qualitie={item} />
-          ))}
-        </td>
-        <td>
-          <span key={profession._id}>{profession.name}</span>
-        </td>
-        <td>{completedMeetings}</td>
-        <td>{rate}</td>
-        <td>
-          <BookMark status={bookmark} onClick={onHandleDelete} />
-        </td>
-        <td>
-          <button className='btn btn-danger' onClick={() => onHandleDelete(_id)}>
-            Удалить
-          </button>
-        </td>
-      </tr>
-    </React.Fragment>
-  );
-};
+const User = () => {
+  const [user, setUser] = useState();
+  const { userId } = useParams();
 
-User.propTypes = {
-  user: PropTypes.object.isRequired,
-  onHandleDelete: PropTypes.func.isRequired,
+  useEffect(() => {
+    api.users.getById(userId).then((user) => setUser(user));
+  }, []);
+
+  return <React.Fragment>{user ? <UserInfo user={user} /> : 'Loading...'} </React.Fragment>;
 };
 
 export default User;
