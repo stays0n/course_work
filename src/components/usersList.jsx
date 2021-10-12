@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
+import api from '../api';
 import { paginate } from '../utils/paginate';
 import Pagination from './pagination';
-import api from '../api';
 import GroupList from './groupList';
 import SearchStatus from './searchStatus';
 import UserTable from './usersTable';
-import _ from 'lodash';
+import SearchField from './searchField';
 
 const UsersList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,10 +16,20 @@ const UsersList = () => {
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
   const pageSize = 4;
 
-  const [users, setUsers] = useState(api.users.fetchAll());
+  const [users, setUsers] = useState();
   useEffect(() => {
     api.users.fetchAll().then((data) => setUsers(data));
   }, []);
+
+  // поиск изера по имени
+  const [searchBarValue, setSearchBarValue] = useState('');
+  // паттерн для поиска
+  const template = new RegExp(`${searchBarValue}`, 'gi');
+  useEffect(() => {
+    searchBarValue && clearFilter();
+    // при обновлении searchBarValue установим текущую страницу на 1ю
+    setCurrentPage(1);
+  }, [searchBarValue]);
 
   const handleDelete = (userId) => setUsers(users.filter(({ _id }) => userId !== _id));
 
@@ -43,6 +54,7 @@ const UsersList = () => {
 
   const handleProfessionSelect = (item) => {
     setSelectedProf(item);
+    setSearchBarValue('');
   };
 
   const handlePageChange = (pageIndex) => {
@@ -53,17 +65,23 @@ const UsersList = () => {
     setSortBy(item);
   };
 
+  const clearFilter = () => {
+    setSelectedProf();
+  };
+
+  const handleSearchBy = ({ target }) => {
+    setSearchBarValue(target.value);
+  };
+
   if (users) {
     const filteredUsers = selectedProf
       ? users.filter(({ profession: { _id } }) => _id === selectedProf._id)
-      : users;
+      : searchBarValue
+        ? users.filter(({ name }) => template.test(name))
+        : users;
     const count = filteredUsers.length;
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
     const usersCrop = paginate(sortedUsers, currentPage, pageSize);
-
-    const clearFilter = () => {
-      setSelectedProf();
-    };
 
     return (
       <div className='d-flex'>
@@ -80,17 +98,16 @@ const UsersList = () => {
           </div>
         )}
         <div className='d-flex flex-column'>
+          <SearchStatus length={count} />
+          <SearchField value={searchBarValue} onSearchBy={handleSearchBy} />
           {count > 0 && (
-            <React.Fragment>
-              <SearchStatus length={count} />
-              <UserTable
-                users={usersCrop}
-                onSort={handleSort}
-                selectedSort={sortBy}
-                onHandleDelete={handleDelete}
-                onToggleBookMark={handleToggleBookMark}
-              />
-            </React.Fragment>
+            <UserTable
+              users={usersCrop}
+              onSort={handleSort}
+              selectedSort={sortBy}
+              onHandleDelete={handleDelete}
+              onToggleBookMark={handleToggleBookMark}
+            />
           )}
           <div className='d-flex justify-content-center'>
             <Pagination
@@ -103,8 +120,9 @@ const UsersList = () => {
         </div>
       </div>
     );
+  } else {
+    return <p>Loading...</p>;
   }
-  return <p>Loading...</p>;
 };
 
 UsersList.propTypes = {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import QualitiesList from './qualitiesList';
 
-const UserInfo = ({ user }) => {
+const UserPage = ({ user }) => {
   const { name, profession, qualities, completedMeetings, rate } = user;
 
   return (
@@ -20,8 +20,8 @@ const UserInfo = ({ user }) => {
   );
 };
 
-UserInfo.propTypes = {
+UserPage.propTypes = {
   user: PropTypes.object.isRequired,
 };
 
-export default UserInfo;
+export default UserPage;

@@ -8,7 +8,7 @@ import QualitiesList from './qualitiesList';
 import Table from './table';
 import Name from './name';
 
-const UserTable = ({ users, onSort, selectedSort, onToggleBookMark, onHandleDelete, ...rest }) => {
+const UserTable = ({ users, onSort, selectedSort, onToggleBookMark, onHandleDelete }) => {
   const columns = {
     name: {
       path: 'name',
