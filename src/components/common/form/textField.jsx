@@ -3,11 +3,17 @@ import PropTypes from 'prop-types';
 
 const TextField = ({ label, type, name, value, onChange, error }) => {
   const [showPassword, setShowPassword] = useState(false);
+
   const toggleShowPassword = () => {
     return setShowPassword((prevState) => !prevState);
   };
+
   const getInputClasses = () => {
     return 'form-control' + (error ? ' is-invalid' : '');
+  };
+
+  const handleChange = ({ target }) => {
+    onChange({ name: target.name, value: target.value });
   };
 
   return (
@@ -20,7 +26,7 @@ const TextField = ({ label, type, name, value, onChange, error }) => {
           id={name}
           name={name}
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
         />
         {type === 'password' && (
           <button className='btn btn-outline-secondary' type='button' onClick={toggleShowPassword}>
