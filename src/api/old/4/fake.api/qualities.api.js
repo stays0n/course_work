@@ -20,12 +20,12 @@ const qualities = {
     color: 'danger',
   },
   handsome: {
-    _id: '67rdca3eeb7f6fgeed471102',
+    _id: '67rdca3eeb7f6fgeed471103',
     name: 'Красавчик',
     color: 'info',
   },
   uncertain: {
-    _id: '67rdca3eeb7f6fgeed471103',
+    _id: '67rdca3eeb7f6fgeed471102',
     name: 'Неуверенный',
     color: 'dark',
   },
@@ -34,7 +34,7 @@ const fetchAll = () =>
   new Promise((resolve) => {
     window.setTimeout(function () {
       resolve(qualities);
-    }, 1000);
+    }, 2000);
   });
 
 export default {

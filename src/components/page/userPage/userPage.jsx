@@ -23,8 +23,11 @@ const UserPage = () => {
             <Qualities qualities={user.qualities} />
             <p>completedMeetings: {user.completedMeetings}</p>
             <h2>Rate: {user.rate}</h2>
-            <Link to='/users' className='btn btn-primary'>
+            <Link to='/users' className='btn btn-primary me-2'>
               Все пользователи
+            </Link>
+            <Link to={`/users/${user._id}/edit`} className='btn btn-secondary'>
+              Изменить
             </Link>
           </React.Fragment>
         ) : (
