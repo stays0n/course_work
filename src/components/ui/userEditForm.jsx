@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import api from './../../api';
 import { validator } from './../../utils/validator';
 
@@ -96,6 +97,11 @@ const UserEditForm = ({ state }) => {
   return (
     <div className='container mt-5'>
       <div className='row'>
+        <div>
+          <Link to={'/users/' + state._id} className='btn btn-primary' role='button' type='button'>
+            <i className='bi bi-caret-left'></i>&nbsp;Назад
+          </Link>
+        </div>
         <div className='col-md-6 offset-md-3 shadow p-4'>
           <form onSubmit={handleSubmit}>
             <TextField
@@ -142,7 +148,7 @@ const UserEditForm = ({ state }) => {
             <button
               className='btn btn-primary w-100 mx-auto'
               type='submit'
-              disabled={!professions && !isValid}>
+              disabled={!professions && isValid}>
               Submit
             </button>
           </form>

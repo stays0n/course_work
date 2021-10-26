@@ -174,7 +174,7 @@ const fetchAll = () =>
   new Promise((resolve) => {
     window.setTimeout(function () {
       resolve(JSON.parse(localStorage.getItem('users')));
-    }, 2000);
+    }, 1000);
   });
 const update = (id, data) =>
   new Promise((resolve) => {
