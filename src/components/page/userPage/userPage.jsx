@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import api from './../../../api';
 
 import UserCard from './../userPage/userCard';
@@ -8,9 +9,8 @@ import MeetingsCard from './../userPage/meetingsCard';
 import CommentForm from './../userPage/сommentForm';
 import CommentsList from './../userPage/commentsList';
 
-const UserPage = () => {
+const UserPage = ({ userId }) => {
   const [user, setUser] = useState();
-  const { userId } = useParams();
   const [users, setUsers] = useState([]);
   const [comments, setComments] = useState([]);
 
@@ -74,6 +74,10 @@ const UserPage = () => {
       }
     </React.Fragment>
   );
+};
+
+UserPage.propTypes = {
+  userId: PropTypes.string,
 };
 
 export default UserPage;
