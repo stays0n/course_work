@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-const UserCard = ({ id, name, profession, rate }) => {
-  const [src, setSrc] = React.useState('');
+const UserCard = ({ name, profession, rate }) => {
+  const history = useHistory();
+  const [src, setSrc] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const getSrc = () => {
       const rand = (Math.random() + 1).toString(36).substring(7);
       setSrc('https://avatars.dicebear.com/api/avataaars/' + rand + '.svg');
@@ -14,14 +15,18 @@ const UserCard = ({ id, name, profession, rate }) => {
     !src && getSrc();
   }, [src]);
 
+  const handleClick = () => {
+    history.push(history.location.pathname + '/edit');
+  };
+
   return (
     <div className='card mb-3'>
       <div className='card-body'>
-        <Link
-          to={`/users/${id}/edit`}
-          className='position-absolute top-0 end-0 btn btn-light btn-sm'>
+        <button
+          className='position-absolute top-0 end-0 btn btn-light btn-sm'
+          onClick={handleClick}>
           <i className='bi bi-gear' />
-        </Link>
+        </button>
         <div className='d-flex flex-column align-items-center text-center position-relative'>
           <img src={src} className='rounded-circle shadow-1-strong me-3' alt='avatar' width='150' />
           <div className='mt-3'>
@@ -40,7 +45,6 @@ const UserCard = ({ id, name, profession, rate }) => {
 };
 
 UserCard.propTypes = {
-  id: PropTypes.string,
   name: PropTypes.string,
   profession: PropTypes.string,
   rate: PropTypes.number,

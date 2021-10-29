@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Qualities from './../../ui/qualities';
+import Qualities from './../ui/qualities';
 
 const QualitiesCard = ({ qualities }) => {
   return (
@@ -19,7 +19,7 @@ const QualitiesCard = ({ qualities }) => {
 };
 
 QualitiesCard.propTypes = {
-  qualities: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  qualities: PropTypes.array,
 };
 
 export default QualitiesCard;

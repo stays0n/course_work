@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import api from '../../../api';
 import { validator } from './../../../utils/validator';
 
+import BackButton from '../../common/backButton';
 import TextField from './../../common/form/textField';
 import SelectField from './../../common/form/selectField';
 import RadioField from './../../common/form/radioField';
@@ -13,7 +14,13 @@ const UserEditPage = () => {
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
 
-  const [user, setUser] = useState({ name: '', email: '', profession: '', sex: '', qualities: [] });
+  const [user, setUser] = useState({
+    name: '',
+    email: '',
+    profession: '',
+    sex: '',
+    qualities: [],
+  });
   const [professions, setProfessions] = useState({});
   const [qualities, setQualities] = useState({});
 
@@ -121,9 +128,7 @@ const UserEditPage = () => {
     <div className='container mt-5'>
       <div className='row'>
         <div>
-          <Link to={'/users/' + user._id} className='btn btn-primary' role='button' type='button'>
-            <i className='bi bi-caret-left'></i>&nbsp;Назад
-          </Link>
+          <BackButton />
         </div>
         <div className='col-md-6 offset-md-3 shadow p-4'>
           {
