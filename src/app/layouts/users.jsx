@@ -6,7 +6,7 @@ import UsersListPage from './../components/page/usersListPage/';
 import UserEditPage from '../components/page/userEditPage/';
 import { UserProvider } from '../hooks/useUsers';
 import { ProfessionProvider } from '../hooks/useProfession';
-import { QualityProvider } from '../hooks/useQuality';
+import { QualityProvider } from '../hooks/useQualities';
 
 const Users = () => {
     const { userId, edit } = useParams();

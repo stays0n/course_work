@@ -55,15 +55,13 @@ const UserEditPage = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        api.users
-            .getById(userId)
-            .then(({ profession, ...data }) =>
-                setUser((prevState) => ({
-                    ...prevState,
-                    ...data,
-                    profession: profession._id,
-                })),
-            );
+        api.users.getById(userId).then(({ profession, ...data }) =>
+            setUser((prevState) => ({
+                ...prevState,
+                ...data,
+                profession: profession._id,
+            })),
+        );
         api.professions.fetchAll().then((data) => setProfessions(data));
         api.qualities.fetchAll().then((data) => setQualities(data));
         return () => {};

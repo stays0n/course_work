@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 const QualityContext = React.createContext();
 
-export const useQuality = () => {
+export const useQualities = () => {
     return useContext(QualityContext);
 };
 
@@ -27,7 +27,7 @@ export const QualityProvider = ({ children }) => {
 
     async function getQualityList() {
         try {
-            const { content } = await qualityService.get();
+            const { content } = await qualityService.fetchAll();
             setQualities(content);
             setIsLoading(false);
         } catch (error) {
@@ -36,7 +36,6 @@ export const QualityProvider = ({ children }) => {
     }
 
     function getQualities(qualArray) {
-        // return qualities.find((qual) => qual._id === id);
         return qualArray.map((id) => {
             return qualities.find((qual) => qual._id === id);
         });
