@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '../common/form/textField';
 import { validator } from '../../utils/validator';
+import { useHistory } from 'react-router-dom';
 
 import SelectField from './../common/form/selectField';
 import RadioField from './../common/form/radioField';
@@ -9,7 +10,6 @@ import CheckBoxField from './../common/form/checkBoxField';
 import { useQualities } from './../../hooks/useQualities';
 import { useProfession } from './../../hooks/useProfession';
 import { useAuth } from './../../hooks/useAuth';
-import { useHistory } from 'react-router';
 
 const RegisterForm = () => {
     const history = useHistory();
