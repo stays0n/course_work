@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import api from '../../../api';
 import { validator } from './../../../utils/validator';
 
 import BackButton from '../../common/backButton';
@@ -8,6 +7,9 @@ import TextField from './../../common/form/textField';
 import SelectField from './../../common/form/selectField';
 import RadioField from './../../common/form/radioField';
 import MultiSelectField from './../../common/form/multiSelectField';
+// import { useProfession } from '../../../hooks/useProfession';
+// import { useQualities } from '../../../hooks/useQualities';
+// import { useAuth } from '../../../hooks/useAuth';
 
 const UserEditPage = () => {
     const { userId } = useParams();
@@ -21,8 +23,10 @@ const UserEditPage = () => {
         sex: '',
         qualities: [],
     });
-    const [professions, setProfessions] = useState({});
-    const [qualities, setQualities] = useState({});
+
+    // const { currentUser } = useAuth();
+    // const { professions, isLoading: professionsLoading } = useProfession();
+    // const { qualities, isLoading: qualitiesLoading } = useQualities();
 
     const getProfessionById = (id) => {
         for (const prof in professions) {
@@ -69,6 +73,7 @@ const UserEditPage = () => {
 
     useEffect(() => {
         if (user._id) setIsLoading(false);
+        validate();
     }, [user]);
 
     const handleChange = (target) => {
@@ -77,9 +82,6 @@ const UserEditPage = () => {
 
     const [errors, setErrors] = useState({});
     const isValid = Object.keys(errors).length === 0;
-    useEffect(() => {
-        validate();
-    }, [user]);
 
     const validatorConfig = {
         name: {
@@ -114,7 +116,7 @@ const UserEditPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
-        if (!isValid) return;
+        if (!isValid) return '';
 
         const { profession, qualities } = user;
 
@@ -136,63 +138,62 @@ const UserEditPage = () => {
                     <BackButton />
                 </div>
                 <div className="col-md-6 offset-md-3 shadow p-4">
-                    {
-                        // eslint-disable-next-line multiline-ternary
-                        !isLoading && Object.keys(professions).length > 0 ? (
-                            <form onSubmit={handleSubmit}>
-                                <TextField
-                                    label="Имя"
-                                    name="name"
-                                    value={user.name}
-                                    onChange={handleChange}
-                                    error={errors.name}
-                                />
-                                <TextField
-                                    label="Электронная почта"
-                                    name="email"
-                                    value={user.email}
-                                    onChange={handleChange}
-                                    error={errors.email}
-                                />
-                                <SelectField
-                                    label="Выбери свою профессию"
-                                    name="profession"
-                                    options={professions}
-                                    onChange={handleChange}
-                                    value={user.profession}
-                                    defaultOption="Выбрать..."
-                                    error={errors.profession}
-                                />
-                                <RadioField
-                                    label="Выберите ваш пол"
-                                    name="sex"
-                                    value={user.sex}
-                                    onChange={handleChange}
-                                    options={[
-                                        { name: 'Male', value: 'male' },
-                                        { name: 'Female', value: 'female' },
-                                        { name: 'Other', value: 'other' },
-                                    ]}
-                                />
-                                <MultiSelectField
-                                    label="Выберите ваши качества"
-                                    name="qualities"
-                                    options={qualities}
-                                    onChange={handleChange}
-                                    defaultValue={getDefaultQualitiesForMultiSelect()}
-                                />
-                                <button
-                                    className="btn btn-primary w-100 mx-auto"
-                                    type="submit"
-                                    disabled={!isValid}
-                                >
-                                    Submit
-                                </button>
-                            </form>
-                        ) : (
-                            <p>Loading...</p>
-                        )
-                    }
+                    <form onSubmit={handleSubmit}>
+                        <TextField
+                            label="Имя"
+                            name="name"
+                            value={currentUser.name}
+                            onChange={handleChange}
+                            error={errors.name}
+                        />
+                        <TextField
+                            label="Электронная почта"
+                            name="email"
+                            value={currentUser.email}
+                            onChange={handleChange}
+                            error={errors.email}
+                        />
+                        {!professionsLoading && (
+                            <SelectField
+                                label="Выбери свою профессию"
+                                name="profession"
+                                options={professions}
+                                onChange={handleChange}
+                                value={currentUser.profession}
+                                defaultOption="Выбрать..."
+                                error={errors.profession}
+                            />
+                        )}
+
+                        <RadioField
+                            label="Выберите ваш пол"
+                            name="sex"
+                            value={user.sex}
+                            onChange={handleChange}
+                            options={[
+                                { name: 'Male', value: 'male' },
+                                { name: 'Female', value: 'female' },
+                                { name: 'Other', value: 'other' },
+                            ]}
+                        />
+                        {!qualitiesLoading && (
+                            <MultiSelectField
+                                label="Выберите ваши качества"
+                                name="qualities"
+                                options={qualities}
+                                onChange={handleChange}
+                                defaultValue={getDefaultQualitiesForMultiSelect()}
+                            />
+                        )}
+
+                        <button
+                            className="btn btn-primary w-100 mx-auto"
+                            type="submit"
+                            disabled={!isValid}
+                        >
+                            Submit
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

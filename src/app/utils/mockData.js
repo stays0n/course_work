@@ -55,7 +55,7 @@ const useMockData = () => {
                 incrementCount();
             }
         } catch (error) {
-            setError(error);
+            setError(error.message);
             setStatus(statusConsts.error);
         }
     }

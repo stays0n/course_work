@@ -1,65 +1,57 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import api from './../../../api';
-
-import SelectField from '../../common/form/selectField';
 import TextAreaField from '../../common/form/textAreaField';
-const initialData = { userId: '', content: '' };
+import { validator } from '../../../utils/validator';
 
 const CommentForm = ({ onSubmit }) => {
-    const [fields, setFields] = useState(initialData);
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        api.users
-            .fetchAll()
-            .then((users) =>
-                users.map((user) => ({ _id: user._id, name: user.name })),
-            ) // нужно ли?
-            .then((data) => setUsers(data));
-        return () => {};
-    }, []);
+    const [data, setData] = useState({ content: '' });
+    const [errors, setErrors] = useState({});
 
     const handleChange = (target) => {
-        setFields((prevState) => ({
+        setData((prevState) => ({
             ...prevState,
             [target.name]: target.value,
         }));
     };
 
-    const clearFields = () => {
-        setFields(initialData);
+    const validatorConfig = {
+        content: {
+            isRequired: {
+                message: 'Сообщение не может быть пустым',
+            },
+        },
     };
 
-    const handlePost = (e) => {
+    const validate = () => {
+        const errors = validator(data, validatorConfig);
+
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const clearForm = () => {
+        setData({ content: '' });
+        setErrors({});
+    };
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(fields);
-        clearFields();
+        const isValid = validate();
+        if (!isValid) return;
+        onSubmit(data);
+        clearForm();
     };
-
-    // const arrayOfUsers =
-    //   users &&
-    //   Object.keys(users).map((userId) => ({
-    //     name: users[userId].name,
-    //     _id: users[userId]._id,
-    //   }));
 
     return (
         <React.Fragment>
-            <form onSubmit={handlePost}>
+            <form onSubmit={handleSubmit}>
                 <h2>New comment</h2>
-                <SelectField
-                    onChange={handleChange}
-                    options={users}
-                    name="userId"
-                    value={fields.userId}
-                    defaultOption="Выберите пользователя"
-                />
                 <TextAreaField
-                    value={fields.content}
+                    value={data.content || ''}
                     onChange={handleChange}
                     name="content"
                     label="Сообщение"
+                    error={errors.content}
                     rows="3"
                 />
                 <div className="d-flex justify-content-end">
