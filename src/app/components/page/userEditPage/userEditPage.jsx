@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { validator } from './../../../utils/validator';
 
 import BackButton from '../../common/backButton';
@@ -12,18 +12,17 @@ import { useQualities } from '../../../hooks/useQualities';
 import { useAuth } from '../../../hooks/useAuth';
 
 const UserEditPage = () => {
-    // const history = useHistory();
+    const history = useHistory();
 
     const [loaded, setIsLoaded] = useState(false);
     useEffect(() => {
         if (!professionsLoading && !qualitiesLoading) setIsLoaded(true);
     });
 
-    const { currentUser, updateUserData } = useAuth();
+    const { currentUser, updateUser } = useAuth();
     const {
         professions,
         isLoading: professionsLoading,
-        getProfession,
     } = useProfession();
     const {
         qualities,
@@ -61,14 +60,6 @@ const UserEditPage = () => {
             qualities: defaultQualitiesForMultiSelect(currentUser.qualities),
         }));
     }, [qualitiesLoading]);
-
-    function getProfessionById(id) {
-        return getProfession(id);
-    }
-
-    function getQualitiesByIds(elements) {
-        return getQualities(elements);
-    }
 
     useEffect(() => {
         validate();
@@ -116,21 +107,19 @@ const UserEditPage = () => {
         const isValid = validate();
         if (!isValid) return;
 
-        const { profession, qualities } = data;
+        const { qualities } = data;
 
         const qualIds = qualities.map((qual) => qual.value);
-        console.log(qualIds);
 
         const newData = {
+            ...currentUser,
             ...data,
-            profession: getProfessionById(profession),
-            qualities: getQualitiesByIds(qualIds),
+            qualities: qualIds,
         };
-        updateUserData(newData);
 
-        // api.users
-        //     .update(userId, newData)
-        //     .then((data) => history.push('/users/' + data._id));
+        updateUser(newData);
+
+        history.push('/users/' + currentUser._id);
     };
 
     return (
