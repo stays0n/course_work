@@ -112,8 +112,9 @@ const UserEditPage = () => {
         const qualIds = qualities.map((qual) => qual.value);
 
         const newData = {
-            ...currentUser,
+            // ...currentUser,
             ...data,
+            _id: currentUser._id,
             qualities: qualIds,
         };
 
