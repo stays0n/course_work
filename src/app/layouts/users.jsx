@@ -5,8 +5,6 @@ import UserPage from './../components/page/userPage/';
 import UsersListPage from './../components/page/usersListPage/';
 import UserEditPage from '../components/page/userEditPage/';
 import { UserProvider } from '../hooks/useUsers';
-import { ProfessionProvider } from '../hooks/useProfession';
-
 import { useAuth } from '../hooks/useAuth';
 
 const Users = () => {
@@ -16,23 +14,19 @@ const Users = () => {
     return (
         <React.Fragment>
             <UserProvider>
-                <ProfessionProvider>
-                    {userId ? (
-                        edit ? (
-                            userId === currentUser._id ? (
-                                <UserEditPage />
-                            ) : (
-                                <Redirect
-                                    to={`/users/${currentUser._id}/edit`}
-                                />
-                            )
+                {userId ? (
+                    edit ? (
+                        userId === currentUser._id ? (
+                            <UserEditPage />
                         ) : (
-                            <UserPage userId={userId} />
+                            <Redirect to={`/users/${currentUser._id}/edit`} />
                         )
                     ) : (
-                        <UsersListPage />
-                    )}
-                </ProfessionProvider>
+                        <UserPage userId={userId} />
+                    )
+                ) : (
+                    <UsersListPage />
+                )}
             </UserProvider>
         </React.Fragment>
     );

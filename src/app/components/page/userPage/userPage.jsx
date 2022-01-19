@@ -28,7 +28,7 @@ const UserPage = ({ userId }) => {
                         <UserCard user={user} />
                         <QualitiesCard qualities={user.qualities} />
                         <MeetingsCard
-                            completedMeetings={user.complitedMeetings}
+                            completedMeetings={user.completedMeetings}
                         />
                     </div>
 

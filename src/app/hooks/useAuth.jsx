@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
                 _id: data.localId,
                 email,
                 rate: randomInt(1, 5),
-                complitedMeetings: randomInt(0, 200),
+                completedMeetings: randomInt(0, 200),
                 image: `https://avatars.dicebear.com/api/avataaars/${(
                     Math.random() + 1
                 )
