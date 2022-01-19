@@ -36,4 +36,19 @@ export const loadUsersList = () => async (dispatch, getState) => {
     }
 };
 
+export const getUsersList = () => (state) => state.users.entities;
+export const getUserById = (userId) => (state) => {
+    if (state.users.entities) {
+        let user;
+        for (const u of state.users.entities) {
+            if (u._id === userId) {
+                user = u;
+                break;
+            }
+        }
+        return user;
+    }
+    return {};
+};
+
 export default usersReducer;

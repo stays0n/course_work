@@ -46,11 +46,11 @@ export const loadProfessionsList = () => async (dispatch, getState) => {
 export const getProfessions = () => (state) => state.professions.entities;
 export const getProfessionsLoadingStatus = () => (state) =>
     state.professions.isLoading;
-export const getProfessionById = (id) => (state) => {
+export const getProfessionById = (professionId) => (state) => {
     if (state.professions.entities) {
         let profession;
         for (const prof of state.professions.entities) {
-            if (prof._id === id) {
+            if (prof._id === professionId) {
                 profession = prof;
                 break;
             }

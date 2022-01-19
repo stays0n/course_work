@@ -7,7 +7,6 @@ import GroupList from './../../common/groupList';
 import SearchStatus from './../../ui/searchStatus';
 import UserTable from './../../ui/usersTable';
 
-import { useUsers } from './../../../hooks/useUsers';
 import { useAuth } from '../../../hooks/useAuth';
 
 import { useSelector } from 'react-redux';
@@ -15,9 +14,10 @@ import {
     getProfessions,
     getProfessionsLoadingStatus,
 } from '../../../store/professions';
+import { getUsersList } from '../../../store/users';
 
 const UsersListPage = () => {
-    const { users } = useUsers();
+    const users = useSelector(getUsersList());
     const professions = useSelector(getProfessions());
     const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const { currentUser } = useAuth();
