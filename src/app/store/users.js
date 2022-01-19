@@ -2,6 +2,7 @@ import { createAction, createSlice } from '@reduxjs/toolkit';
 import localStorageService from '../services/localStorage.service';
 import authService from '../services/auth.service';
 import userService from '../services/user.service';
+import randomInt from '../utils/randomInt';
 
 const usersSlice = createSlice({
     name: 'users',
@@ -30,6 +31,9 @@ const usersSlice = createSlice({
         authRequestFailed(state, action) {
             state.error = action.payload;
         },
+        userCreated(state, action) {
+            state.entities.push(action.payload);
+        },
     },
 });
 
@@ -40,9 +44,12 @@ const {
     usersRequestedFailed,
     authRequestSuccess,
     authRequestFailed,
+    userCreated,
 } = actions;
 
-const authRequested = createAction('users/authRequested');
+const userAuthRequested = createAction('users/authRequested');
+const createUserRequested = createAction('users/createUserRequested');
+const createUserFailed = createAction('users/createUserFailed');
 
 export const loadUsersList = () => async (dispatch, getState) => {
     dispatch(usersRequested());
@@ -56,15 +63,40 @@ export const loadUsersList = () => async (dispatch, getState) => {
 export const signUp =
     ({ email, password, ...rest }) =>
     async (dispatch, getState) => {
-        dispatch(authRequested());
+        dispatch(userAuthRequested());
         try {
             const data = await authService.register({ email, password });
             localStorageService.setTokens(data);
             dispatch(authRequestSuccess({ userId: data.localId }));
+            dispatch(
+                createUser({
+                    _id: data.localId,
+                    email,
+                    rate: randomInt(1, 5),
+                    completedMeetings: randomInt(0, 200),
+                    image: `https://avatars.dicebear.com/api/avataaars/${(
+                        Math.random() + 1
+                    )
+                        .toString(36)
+                        .substring(7)}.svg`,
+                    ...rest,
+                }),
+            );
         } catch (error) {
             dispatch(authRequestFailed(error.message));
         }
     };
+function createUser(payload) {
+    return async (dispatch, getState) => {
+        dispatch(createUserRequested());
+        try {
+            const { content } = await userService.create(payload);
+            dispatch(userCreated(content));
+        } catch (error) {
+            dispatch(createUserFailed(error.message));
+        }
+    };
+}
 
 export const getUsersList = () => (state) => state.users.entities;
 export const getUserById = (userId) => (state) => {
