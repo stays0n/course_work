@@ -1,4 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAction, createSlice } from '@reduxjs/toolkit';
+import localStorageService from '../services/localStorage.service';
+import authService from '../services/auth.service';
 import userService from '../services/user.service';
 
 const usersSlice = createSlice({
@@ -7,6 +9,8 @@ const usersSlice = createSlice({
         entities: null,
         isLoading: true,
         error: null,
+        auth: null,
+        isLoggedIn: false,
     },
     reducers: {
         usersRequested(state, action) {
@@ -20,11 +24,25 @@ const usersSlice = createSlice({
             state.error = action.payload;
             state.isLoading = false;
         },
+        authRequestSuccess(state, action) {
+            state.auth = { ...action.payload, isLoggedIn: true };
+        },
+        authRequestFailed(state, action) {
+            state.error = action.payload;
+        },
     },
 });
 
 const { actions, reducer: usersReducer } = usersSlice;
-const { usersRequested, usersRecived, usersRequestedFailed } = actions;
+const {
+    usersRequested,
+    usersRecived,
+    usersRequestedFailed,
+    authRequestSuccess,
+    authRequestFailed,
+} = actions;
+
+const authRequested = createAction('users/authRequested');
 
 export const loadUsersList = () => async (dispatch, getState) => {
     dispatch(usersRequested());
@@ -35,6 +53,18 @@ export const loadUsersList = () => async (dispatch, getState) => {
         dispatch(usersRequestedFailed(error.message));
     }
 };
+export const signUp =
+    ({ email, password, ...rest }) =>
+    async (dispatch, getState) => {
+        dispatch(authRequested());
+        try {
+            const data = await authService.register({ email, password });
+            localStorageService.setTokens(data);
+            dispatch(authRequestSuccess({ userId: data.localId }));
+        } catch (error) {
+            dispatch(authRequestFailed(error.message));
+        }
+    };
 
 export const getUsersList = () => (state) => state.users.entities;
 export const getUserById = (userId) => (state) => {
