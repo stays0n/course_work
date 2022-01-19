@@ -6,7 +6,6 @@ import UsersListPage from './../components/page/usersListPage/';
 import UserEditPage from '../components/page/userEditPage/';
 import { UserProvider } from '../hooks/useUsers';
 import { ProfessionProvider } from '../hooks/useProfession';
-import { QualityProvider } from '../hooks/useQualities';
 
 import { useAuth } from '../hooks/useAuth';
 
@@ -18,23 +17,21 @@ const Users = () => {
         <React.Fragment>
             <UserProvider>
                 <ProfessionProvider>
-                    <QualityProvider>
-                        {userId ? (
-                            edit ? (
-                                userId === currentUser._id ? (
-                                    <UserEditPage />
-                                ) : (
-                                    <Redirect
-                                        to={`/users/${currentUser._id}/edit`}
-                                    />
-                                )
+                    {userId ? (
+                        edit ? (
+                            userId === currentUser._id ? (
+                                <UserEditPage />
                             ) : (
-                                <UserPage userId={userId} />
+                                <Redirect
+                                    to={`/users/${currentUser._id}/edit`}
+                                />
                             )
                         ) : (
-                            <UsersListPage />
-                        )}
-                    </QualityProvider>
+                            <UserPage userId={userId} />
+                        )
+                    ) : (
+                        <UsersListPage />
+                    )}
                 </ProfessionProvider>
             </UserProvider>
         </React.Fragment>

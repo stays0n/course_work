@@ -4,7 +4,6 @@ import RegisterForm from './../components/ui/registerForm';
 import LoginForm from './../components/ui/loginForm';
 
 import { ProfessionProvider } from '../hooks/useProfession';
-import { QualityProvider } from '../hooks/useQualities';
 
 const Login = () => {
     const { type } = useParams();
@@ -19,47 +18,45 @@ const Login = () => {
     };
 
     return (
-        <QualityProvider>
-            <ProfessionProvider>
-                <div className="container mt-5">
-                    <div className="row">
-                        <div className="col-md-6 offset-md-3 shadow p-4">
-                            {formType === 'register' ? (
-                                <React.Fragment>
-                                    <h3 className="mb-4">Register</h3>
-                                    <RegisterForm />
-                                    <p>
-                                        Already have account?
-                                        <a
-                                            role="button"
-                                            className="btn mt-2"
-                                            onClick={toggleFormType}
-                                        >
-                                            Sign in
-                                        </a>
-                                    </p>
-                                </React.Fragment>
-                            ) : (
-                                <React.Fragment>
-                                    <h3 className="mb-4">Login</h3>
-                                    <LoginForm />
-                                    <p>
-                                        Dont have account?
-                                        <a
-                                            role="button"
-                                            className="btn mt-2"
-                                            onClick={toggleFormType}
-                                        >
-                                            Sign up
-                                        </a>
-                                    </p>
-                                </React.Fragment>
-                            )}
-                        </div>
+        <ProfessionProvider>
+            <div className="container mt-5">
+                <div className="row">
+                    <div className="col-md-6 offset-md-3 shadow p-4">
+                        {formType === 'register' ? (
+                            <React.Fragment>
+                                <h3 className="mb-4">Register</h3>
+                                <RegisterForm />
+                                <p>
+                                    Already have account?
+                                    <a
+                                        role="button"
+                                        className="btn mt-2"
+                                        onClick={toggleFormType}
+                                    >
+                                        Sign in
+                                    </a>
+                                </p>
+                            </React.Fragment>
+                        ) : (
+                            <React.Fragment>
+                                <h3 className="mb-4">Login</h3>
+                                <LoginForm />
+                                <p>
+                                    Dont have account?
+                                    <a
+                                        role="button"
+                                        className="btn mt-2"
+                                        onClick={toggleFormType}
+                                    >
+                                        Sign up
+                                    </a>
+                                </p>
+                            </React.Fragment>
+                        )}
                     </div>
                 </div>
-            </ProfessionProvider>
-        </QualityProvider>
+            </div>
+        </ProfessionProvider>
     );
 };
 

@@ -10,7 +10,11 @@ const Qualitie = ({ qualitie: { color, name, _id } }) => {
 };
 
 Qualitie.propTypes = {
-    qualitie: PropTypes.object.isRequired,
+    qualitie: PropTypes.exact({
+        color: PropTypes.string,
+        name: PropTypes.string,
+        _id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    }),
 };
 
 export default Qualitie;

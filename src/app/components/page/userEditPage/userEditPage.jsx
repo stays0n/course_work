@@ -8,15 +8,21 @@ import SelectField from './../../common/form/selectField';
 import RadioField from './../../common/form/radioField';
 import MultiSelectField from './../../common/form/multiSelectField';
 import { useProfession } from '../../../hooks/useProfession';
-import { useQualities } from '../../../hooks/useQualities';
 import { useAuth } from '../../../hooks/useAuth';
+
+import { useSelector } from 'react-redux';
+import {
+    getQualities,
+    getQualitiesLoadingStatus,
+} from '../../../store/qualities';
 
 const UserEditPage = () => {
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState();
     const { currentUser, updateUserData } = useAuth();
-    const { qualities, isLoading: qualitiesLoading } = useQualities();
+    const qualities = useSelector(getQualities());
+    const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
     const { professions, isLoading: professionsLoading } = useProfession();
     const [errors, setErrors] = useState({});
     const isValid = Object.keys(errors).length === 0;

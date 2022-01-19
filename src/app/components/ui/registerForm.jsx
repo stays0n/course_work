@@ -7,9 +7,11 @@ import SelectField from './../common/form/selectField';
 import RadioField from './../common/form/radioField';
 import MultiSelectField from './../common/form/multiSelectField';
 import CheckBoxField from './../common/form/checkBoxField';
-import { useQualities } from './../../hooks/useQualities';
 import { useProfession } from './../../hooks/useProfession';
 import { useAuth } from './../../hooks/useAuth';
+
+import { useSelector } from 'react-redux';
+import { getQualities } from '../../store/qualities';
 
 const RegisterForm = () => {
     const history = useHistory();
@@ -28,7 +30,7 @@ const RegisterForm = () => {
         licence: false,
     });
     const { signUp } = useAuth();
-    const { qualities } = useQualities();
+    const qualities = useSelector(getQualities());
     const qualitiesList = qualities.map((q) => ({
         label: q.name,
         value: q._id,
