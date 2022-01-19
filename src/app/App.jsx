@@ -13,12 +13,14 @@ import Users from './layouts/users';
 import { useDispatch } from 'react-redux';
 import { loadQualitiesList } from './store/qualities';
 import { loadProfessionsList } from './store/professions';
+import { loadUsersList } from './store/users';
 
 const App = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(loadQualitiesList());
         dispatch(loadProfessionsList());
+        dispatch(loadUsersList());
     }, []);
 
     return (

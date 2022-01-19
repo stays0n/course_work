@@ -41,7 +41,7 @@ export const UserProvider = ({ children }) => {
 
     async function getUsers() {
         try {
-            const { content } = await userService.get();
+            const { content } = await userService.fetchAll();
             setUsers(content);
             setIsLoading(false);
         } catch (error) {
