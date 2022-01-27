@@ -11,6 +11,7 @@ import { createStore } from './app/store/createStore';
 import { Provider } from 'react-redux';
 
 const store = createStore();
+console.log(history);
 
 ReactDOM.render(
     <React.StrictMode>

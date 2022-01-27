@@ -52,18 +52,35 @@ const userAuthRequested = createAction('users/authRequested');
 const createUserRequested = createAction('users/createUserRequested');
 const createUserFailed = createAction('users/createUserFailed');
 
-export const loadUsersList = () => async (dispatch, getState) => {
-    dispatch(usersRequested());
-    try {
-        const { content } = await userService.fetchAll();
-        dispatch(usersRecived(content));
-    } catch (error) {
-        dispatch(usersRequestedFailed(error.message));
-    }
-};
-export const signUp =
-    ({ email, password, ...rest }) =>
-    async (dispatch, getState) => {
+function createUser(payload) {
+    return async function (dispatch, getState) {
+        dispatch(createUserRequested());
+        try {
+            const { content } = await userService.create(payload);
+            dispatch(userCreated(content));
+            history.push('/users');
+        } catch (error) {
+            dispatch(createUserFailed(error.message));
+        }
+    };
+}
+
+export function signIn({ payload, redirect }) {
+    return async function (dispatch, getState) {
+        const { email, password } = payload;
+        dispatch(userAuthRequested());
+        try {
+            const data = await authService.login({ email, password });
+            localStorageService.setTokens(data);
+            dispatch(authRequestSuccess({ userId: data.localId }));
+            history.push(redirect);
+        } catch (error) {
+            dispatch(authRequestFailed(error.message));
+        }
+    };
+}
+export function signUp({ email, password, ...rest }) {
+    return async function (dispatch, getState) {
         dispatch(userAuthRequested());
         try {
             const data = await authService.register({ email, password });
@@ -87,15 +104,15 @@ export const signUp =
             dispatch(authRequestFailed(error.message));
         }
     };
-function createUser(payload) {
-    return async (dispatch, getState) => {
-        dispatch(createUserRequested());
+}
+export function loadUsersList() {
+    return async function (dispatch, getState) {
+        dispatch(usersRequested());
         try {
-            const { content } = await userService.create(payload);
-            dispatch(userCreated(content));
-            history.push('/users');
+            const { content } = await userService.fetchAll();
+            dispatch(usersRecived(content));
         } catch (error) {
-            dispatch(createUserFailed(error.message));
+            dispatch(usersRequestedFailed(error.message));
         }
     };
 }
