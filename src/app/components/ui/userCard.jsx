@@ -12,6 +12,7 @@ const UserCard = ({ user }) => {
         history.push(history.location.pathname + '/edit');
     };
 
+    if (!Object.keys(user).length) return <h3>Loading...</h3>;
     return (
         <div className="card mb-3">
             <div className="card-body">

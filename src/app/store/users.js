@@ -2,7 +2,8 @@ import { createAction, createSlice } from '@reduxjs/toolkit';
 import localStorageService from '../services/localStorage.service';
 import authService from '../services/auth.service';
 import userService from '../services/user.service';
-import randomInt from '../utils/randomInt';
+import getRandomInt from '../utils/getRandomInt';
+import history from '../utils/history';
 
 const usersSlice = createSlice({
     name: 'users',
@@ -72,8 +73,8 @@ export const signUp =
                 createUser({
                     _id: data.localId,
                     email,
-                    rate: randomInt(1, 5),
-                    completedMeetings: randomInt(0, 200),
+                    rate: getRandomInt(1, 5),
+                    completedMeetings: getRandomInt(0, 200),
                     image: `https://avatars.dicebear.com/api/avataaars/${(
                         Math.random() + 1
                     )
@@ -92,6 +93,7 @@ function createUser(payload) {
         try {
             const { content } = await userService.create(payload);
             dispatch(userCreated(content));
+            history.push('/users');
         } catch (error) {
             dispatch(createUserFailed(error.message));
         }
