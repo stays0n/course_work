@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 
 import UserPage from './../components/page/userPage/';
@@ -7,9 +7,20 @@ import UserEditPage from '../components/page/userEditPage/';
 import { UserProvider } from '../hooks/useUsers';
 import { useAuth } from '../hooks/useAuth';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { getDataStatus, loadUsersList } from '../store/users';
+
 const Users = () => {
     const { userId, edit } = useParams();
     const { currentUser } = useAuth();
+    const dataStatus = useSelector(getDataStatus());
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!dataStatus) dispatch(loadUsersList());
+    }, []);
+    console.log(dataStatus);
+    if (!dataStatus) return 'Loading...';
 
     return (
         <React.Fragment>
