@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    function logout() {
+    function logOut() {
         localStorageService.removeAuthData();
         setUser(null);
         history.push('/');
@@ -145,7 +145,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider
-            value={{ signUp, currentUser, signIn, logout, updateUserData }}
+            value={{ signUp, currentUser, signIn, logOut, updateUserData }}
         >
             {!isLoading ? children : 'Loading...'}
         </AuthContext.Provider>
