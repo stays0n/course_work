@@ -1,44 +1,38 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 
 import UserPage from './../components/page/userPage/';
 import UsersListPage from './../components/page/usersListPage/';
 import UserEditPage from '../components/page/userEditPage/';
 import { UserProvider } from '../hooks/useUsers';
-import { useAuth } from '../hooks/useAuth';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { getDataStatus, loadUsersList } from '../store/users';
+import { useSelector } from 'react-redux';
+import { getCurrentUserId } from '../store/users';
+import UsersLoader from '../components/ui/hoc/usersLoader';
 
 const Users = () => {
     const { userId, edit } = useParams();
-    const { currentUser } = useAuth();
-    const dataStatus = useSelector(getDataStatus());
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        if (!dataStatus) dispatch(loadUsersList());
-    }, []);
-    console.log(dataStatus);
-    if (!dataStatus) return 'Loading...';
+    const currentUserId = useSelector(getCurrentUserId());
 
     return (
         <React.Fragment>
-            <UserProvider>
-                {userId ? (
-                    edit ? (
-                        userId === currentUser._id ? (
-                            <UserEditPage />
+            <UsersLoader>
+                <UserProvider>
+                    {userId ? (
+                        edit ? (
+                            userId === currentUserId ? (
+                                <UserEditPage />
+                            ) : (
+                                <Redirect to={`/users/${currentUserId}/edit`} />
+                            )
                         ) : (
-                            <Redirect to={`/users/${currentUser._id}/edit`} />
+                            <UserPage userId={userId} />
                         )
                     ) : (
-                        <UserPage userId={userId} />
-                    )
-                ) : (
-                    <UsersListPage />
-                )}
-            </UserProvider>
+                        <UsersListPage />
+                    )}
+                </UserProvider>
+            </UsersLoader>
         </React.Fragment>
     );
 };
