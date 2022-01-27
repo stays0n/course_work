@@ -4,7 +4,6 @@ import { useParams, Redirect } from 'react-router-dom';
 import UserPage from './../components/page/userPage/';
 import UsersListPage from './../components/page/usersListPage/';
 import UserEditPage from '../components/page/userEditPage/';
-import { UserProvider } from '../hooks/useUsers';
 
 import { useSelector } from 'react-redux';
 import { getCurrentUserId } from '../store/users';
@@ -17,7 +16,6 @@ const Users = () => {
     return (
         <React.Fragment>
             <UsersLoader>
-                <UserProvider>
                     {userId ? (
                         edit ? (
                             userId === currentUserId ? (
@@ -31,7 +29,6 @@ const Users = () => {
                     ) : (
                         <UsersListPage />
                     )}
-                </UserProvider>
             </UsersLoader>
         </React.Fragment>
     );

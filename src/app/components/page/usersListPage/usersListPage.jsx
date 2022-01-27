@@ -7,8 +7,6 @@ import GroupList from './../../common/groupList';
 import SearchStatus from './../../ui/searchStatus';
 import UserTable from './../../ui/usersTable';
 
-// import { useAuth } from '../../../hooks/useAuth';
-
 import { useSelector } from 'react-redux';
 import {
     getProfessions,
