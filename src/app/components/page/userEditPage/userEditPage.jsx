@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import { validator } from './../../../utils/validator';
 
 import BackButton from '../../common/backButton';
@@ -7,9 +6,8 @@ import TextField from './../../common/form/textField';
 import SelectField from './../../common/form/selectField';
 import RadioField from './../../common/form/radioField';
 import MultiSelectField from './../../common/form/multiSelectField';
-import { useAuth } from '../../../hooks/useAuth';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
     getQualities,
     getQualitiesLoadingStatus,
@@ -18,14 +16,13 @@ import {
     getProfessions,
     getProfessionsLoadingStatus,
 } from '../../../store/professions';
-import { getCurrentUserData } from '../../../store/users';
+import { getCurrentUserData, updateUserData } from '../../../store/users';
 
 const UserEditPage = () => {
-    const history = useHistory();
+    const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState();
     const currentUser = useSelector(getCurrentUserData());
-    const { updateUserData } = useAuth();
     const qualities = useSelector(getQualities());
     const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
     const professions = useSelector(getProfessions());
@@ -43,17 +40,18 @@ const UserEditPage = () => {
         setData((prevState) => ({ ...prevState, [target.name]: target.value }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
 
-        await updateUserData({
+        const userData = {
             ...data,
             qualities: data.qualities.map((q) => q.value),
-        });
+        };
+        const redirect = '/users/' + currentUser._id;
 
-        history.push('/users/' + currentUser._id);
+        dispatch(updateUserData({ payload: userData, redirect }));
     };
 
     const getQualitiesListByIds = (qualitiesIds) => {
