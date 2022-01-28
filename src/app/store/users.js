@@ -4,6 +4,7 @@ import authService from '../services/auth.service';
 import userService from '../services/user.service';
 import getRandomInt from '../utils/getRandomInt';
 import history from '../utils/history';
+import generateAuthError from '../utils/generateAuthError';
 
 const initialState = localStorageService.getAccessToken()
     ? {
@@ -39,6 +40,9 @@ const usersSlice = createSlice({
             state.error = action.payload;
             state.isLoading = false;
         },
+        authRequested(state, action) {
+            state.error = null;
+        },
         authRequestSuccess(state, action) {
             state.auth = action.payload;
             state.isLoggedIn = true;
@@ -71,6 +75,7 @@ const {
     usersRequested,
     usersRecived,
     usersRequestedFailed,
+    authRequested,
     authRequestSuccess,
     authRequestFailed,
     userCreated,
@@ -78,7 +83,6 @@ const {
     userUpdated,
 } = actions;
 
-const userAuthRequested = createAction('users/authRequested');
 const createUserRequested = createAction('users/createUserRequested');
 const createUserFailed = createAction('users/createUserFailed');
 const updateUserRequested = createAction('users/updateUserRequested');
@@ -118,20 +122,26 @@ export function logOut() {
 export function signIn({ payload, redirect }) {
     return async function (dispatch, getState) {
         const { email, password } = payload;
-        dispatch(userAuthRequested());
+        dispatch(authRequested());
         try {
             const data = await authService.login({ email, password });
             localStorageService.setTokens(data);
             dispatch(authRequestSuccess({ userId: data.localId }));
             history.push(redirect);
         } catch (error) {
-            dispatch(authRequestFailed(error.message));
+            const { code, message } = error.response.data.error;
+            if (code === 400) {
+                const errorMessage = generateAuthError(message);
+                dispatch(authRequestFailed(errorMessage));
+            } else {
+                dispatch(authRequestFailed(error.message));
+            }
         }
     };
 }
 export function signUp({ email, password, ...rest }) {
     return async function (dispatch, getState) {
-        dispatch(userAuthRequested());
+        dispatch(authRequested());
         try {
             const data = await authService.register({ email, password });
             localStorageService.setTokens(data);
@@ -190,5 +200,6 @@ export const getIsLoggedIn = () => (state) => state.users.isLoggedIn;
 export const getDataStatus = () => (state) => state.users.dataLoaded;
 export const getUsersLoadingStatus = () => (state) => state.users.isLoading;
 export const getCurrentUserId = () => (state) => state.users.auth.userId;
+export const getAuthError = () => (state) => state.users.error;
 
 export default usersReducer;

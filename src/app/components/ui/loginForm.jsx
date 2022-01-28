@@ -5,11 +5,12 @@ import { validator } from '../../utils/validator';
 import TextField from '../common/form/textField';
 import CheckBoxField from '../common/form/checkBoxField';
 
-import { useDispatch } from 'react-redux';
-import { signIn } from '../../store/users';
+import { useDispatch, useSelector } from 'react-redux';
+import { signIn, getAuthError } from '../../store/users';
 
 const LoginForm = () => {
     const history = useHistory();
+    const loginError = useSelector(getAuthError());
     /**
      * при добавлении нового инпут,
      * нужно только добавить поле-состояние в объект состояния
@@ -100,6 +101,7 @@ const LoginForm = () => {
             >
                 Оставаться в системе
             </CheckBoxField>
+            {loginError && <p className="text-danger">{loginError}</p>}
             <button
                 className="btn btn-primary w-100 mx-auto"
                 type="submit"
