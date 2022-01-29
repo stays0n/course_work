@@ -7,8 +7,6 @@ import QualitiesCard from './../../ui/qualitiesCard';
 import MeetingsCard from './../../ui/meetingsCard';
 import Comments from './../../ui/comments';
 
-import { CommentsProvider } from '../../../hooks/useComments';
-
 import { useSelector } from 'react-redux';
 import { getUserById } from '../../../store/users';
 
@@ -34,9 +32,7 @@ const UserPage = ({ userId }) => {
                     </div>
 
                     <div className="col-md-8">
-                        <CommentsProvider>
-                            <Comments />
-                        </CommentsProvider>
+                        <Comments />
                     </div>
                 </div>
             </div>
