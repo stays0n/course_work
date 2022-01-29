@@ -15,12 +15,12 @@ const QualitiesList = ({ qualities }) => {
 
     useEffect(() => {
         dispatch(loadQualitiesList());
+        return () => null;
     }, []);
-
-    if (isLoading) return 'Loading...';
 
     const qualitiesList = useSelector(getQualitiesByIds(qualities));
 
+    if (isLoading) return 'Loading...';
     return (
         <React.Fragment>
             {qualitiesList.map((item) => (
